@@ -1,0 +1,31 @@
+name: tests
+
+# This is the first repository to adopt the organisation's reusable job, published in
+# kineworld/.github#4. Adopting it took two files plus the three lines below.
+#
+# Why it exists here: tests/test_windows.py defines four module-level test functions,
+# which `unittest discover` does not collect. The suite ran nothing --
+#
+#     $ python -m unittest discover -s tests
+#     Ran 0 tests in 0.000s
+#     NO TESTS RAN
+#
+# -- while `python tests/test_windows.py` passed. With no workflow there was nothing to
+# notice. See kineworld/.github#3 for the audit that found this in four repositories.
+#
+# The reusable job fails if tests/check_collection.py is missing, so the suite cannot be
+# run without the check that proves it ran.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    uses: kineworld/.github/.github/workflows/python-tests.yml@main
+    with:
+      install: "-r requirements.txt"
